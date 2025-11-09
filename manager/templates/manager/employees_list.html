@@ -1,0 +1,406 @@
+{% extends "blank-main.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="container inventory-container">
+  <header class="page-header">
+    <div class="header-titles">
+      <h1>{{ page_title }}</h1>
+      <p class="subtitle">Organized by department. <strong>{{ grouped_employees|length }} Total products</strong>.</p>
+    </div>
+
+    <form class="search-container" method="get">
+      <input type="text" name="q" placeholder="Search employee name..." class="search-input" value="{{q}}">
+      <span class="search-icon"><i class="fa fa-search"></i></span>
+    </form>
+
+    <div>
+
+      <a href="{% url 'manager:create-employee' %}" class="btn btn-primary btn-icon" data-icon="&#43;">
+        Add New employee
+      </a>
+      <a href="{% url 'home' %}" class="btn btn-primary btn-icon" style="background-color: #343a40;">
+        <i class="fa fa-download"></i>
+        Export employees
+      </a>
+    </div>
+  </header>
+
+
+  {% if grouped_employees %}
+
+  {% for department, employees_list in grouped_employees.items %}
+
+  <section class="department-group-card">
+    {% with department_id=department|slugify %}
+
+    <div class="department-header-toggle is-open-header" data-target="#{{ department_id }}" aria-expanded="true">
+      <h2 class="department-title">
+        <span class="department-icon">
+          <i class="fa fa-tag"></i>
+        </span>
+        {{ department }}
+        <span class="employee-count">{{ employees_list|length }} items</span>
+      </h2>
+      <span class="toggle-arrow initial-open"></span>
+    </div>
+
+    <div id="{{ department_id }}" class="collapsible-content is-open">
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+
+            {% if employees_list|length == 0 %}
+
+            <div class="empty-state" style="padding: 1em; font-style: italic; color: #343a40;">
+              <p>No employees found in the system...</p>
+            </div>
+            {% else  %}
+              <th class="col-name">Name</th>
+              <th class="col-price text-center">Position</th>
+              <th class="col-discount text-center">Salary</th>
+              <th class="col-sales-count text-center">Date Hired</th>
+              <th class="col-stock text-center">Address</th>
+              <th class="col-actions text-center">Phone Number</th>
+              <th class="col-actions text-center">-</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+
+
+            {% for employee in employees_list %}
+            <td><strong>{{ employee.first_name }} {{employee.last_name}}</strong></td>
+            <td><strong>{{ employee.employeeprofile.position }}</strong></td>
+            <td class="col-price text-center">${{ employee.employeeprofile.salary|intcomma }}</td>
+            <td class="col-price text-center">{{ employee.employeeprofile.date_hired}}</td>
+            <td class="col-price text-center">{{ employee.employeeprofile.address }}</td>
+            <td class="col-price text-center">{{ employee.employeeprofile.phone_number }}</td>
+
+            <td class="col-actions text-center">
+              <a href="{% url 'manager:edit-employee' employee.id%}" class="btn btn-sm btn-secondary-outline">Edit</a>
+              <a href="{% url 'manager:delete-employee' employee.id%}" class="btn btn-sm btn-danger-outline">Delete</a>
+            </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endwith %}
+  </section>
+
+  {% endfor %}
+
+  {% else %}
+  <div class="empty-state">
+    <p>No employees found in the system.</p>
+  </div>
+  {% endif %}
+
+</div>
+
+
+<script>
+  // JavaScript for Collapsible Functionality
+  document.querySelectorAll('.department-header-toggle').forEach(header => {
+    // Fix for "data-toggle" attribute not being in the HTML
+    if (!header.hasAttribute('data-target')) {
+      // Find the next sibling that is the content div
+      const content = header.nextElementSibling;
+      if (content && content.classList.contains('collapsible-content')) {
+        const id = content.id;
+        header.setAttribute('data-target', `#${id}`);
+      }
+    }
+
+    // Add event listener
+    header.addEventListener('click', function () {
+      const targetId = this.getAttribute('data-target');
+      if (!targetId) return;
+
+      const targetContent = document.querySelector(targetId);
+      const arrow = this.querySelector('.toggle-arrow');
+
+      // Toggle the content and the header's visual state
+      targetContent.classList.toggle('is-open');
+      this.classList.toggle('is-open-header');
+
+      // Update the arrow rotation and accessibility state
+      this.setAttribute('aria-expanded', targetContent.classList.contains('is-open'));
+      arrow.classList.toggle('is-open');
+    });
+  });
+</script>
+
+<style>
+  /* Define the Primary Color for the entire stylesheet */
+  :root {
+    --primary-color: #d10024;
+    /* Deep Red */
+    --primary-color-dark: #8f0018;
+    --primary-color-light: #fbe6e9;
+    /* Very light red for backgrounds */
+    --danger-color: #dc3545;
+    /* Standard red for true alerts */
+  }
+
+  /* --- GLOBAL CONTAINER & HEADER --- */
+  .inventory-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* ------------------------------------------- */
+  .page-header {
+    /* Updated layout for header to accommodate search bar */
+    /* Titles, Search, Button */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 35px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-border-main);
+  }
+
+  .page-header div {
+    min-width: 300px;
+    flex: 1;
+  }
+
+  .header-titles {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .search-container {
+    position: relative;
+    width: 300px;
+    min-width: 200px;
+    /* Comfortable width for search */
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    /* Padding for the icon */
+    border: 2px solid #ced4da;
+    border-radius: 25px;
+    /* Pill shape for modern look */
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .search-input:focus {
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 3px rgba(209, 0, 36, 0.2);
+    /* Themed focus glow */
+    outline: none;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+  }
+
+  .header-titles h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #212529;
+    margin-bottom: 5px;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin: 0;
+  }
+
+
+  /* --- 1. Button Styling Refinements --- */
+  .btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Primary Button (Themed) */
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(209, 0, 36, 0.4);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-color-dark);
+    box-shadow: 0 3px 7px rgba(209, 0, 36, 0.6);
+  }
+
+  .btn-primary.btn-icon::before {
+    content: attr(data-icon);
+    margin-right: 8px;
+    font-size: 1.2rem;
+  }
+
+  /* Small, Outline Action Buttons (Edit/Delete) */
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    margin-left: 8px;
+    box-shadow: none;
+  }
+
+  .btn-secondary-outline {
+    color: #6c757d;
+    border-color: #ced4da;
+    background-color: transparent;
+  }
+
+  .btn-secondary-outline:hover {
+    background-color: #e9ecef;
+    color: #343a40;
+  }
+
+  /* The standard red for danger/delete */
+  .btn-danger-outline {
+    color: var(--danger-color);
+    border-color: var(--danger-color);
+    background-color: transparent;
+  }
+
+  .btn-danger-outline:hover {
+    background-color: var(--danger-color);
+    color: white;
+  }
+
+
+  /* --- 2. Collapsible Container Styling Refinements --- */
+
+  .department-group-card {
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .department-header-toggle {
+    background-color: #f8f9fa;
+    padding: 18px 25px;
+    border-bottom: 1px solid #dee2e6;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+  }
+
+  .department-header-toggle:hover {
+    background-color: #f0f2f7;
+  }
+
+  /* Active Header State (Themed Highlight) */
+  .department-header-toggle.is-open-header {
+    background-color: #ffffff;
+    border-bottom: 2px solid var(--primary-color);
+    /* Themed highlight border */
+  }
+
+  .department-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  /* Themed Icons and Count Bubble */
+  .department-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    /* Themed icon color */
+    margin-right: 10px;
+  }
+
+  .employee-count {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-color-dark);
+    background-color: var(--primary-color-light);
+    /* Lighter themed background */
+    padding: 4px 10px;
+    border-radius: 15px;
+    margin-left: 10px;
+  }
+
+  /* Collapse/Expand Toggle Arrow */
+  .toggle-arrow {
+    border-top-color: #6c757d;
+    /* ... (rest of the arrow style remains the same) ... */
+  }
+
+  .collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+  }
+
+  .collapsible-content.is-open {
+    max-height: 2000px;
+    transition: max-height 0.4s ease-in;
+  }
+
+  /* --- 3. Table Styling Refinements --- */
+
+  .data-table {
+    background-color: #ffffff;
+    width: 100%;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 12px 25px;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  .data-table th {
+    background-color: #fcfcfc;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+
+  .data-table tbody tr:hover {
+    background-color: #f7f9fc;
+  }
+
+  /* Low Stock Alert (Themed Red Border) */
+  .row-low-stock {
+    background-color: #fffafb;
+    border-left: 5px solid var(--danger-color);
+    /* Use the standard danger red for alerts */
+  }
+
+  .stock-low {
+    font-weight: 700;
+    color: var(--danger-color);
+  }
+</style>
+
+
+{% endblock content %}

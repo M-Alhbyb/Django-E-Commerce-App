@@ -1,0 +1,219 @@
+{% extends 'blank-main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <div class="section-title">
+            {% if update %}
+            <h3 class="title">Update A Product</h3>
+            {% else %}
+            <h3 class="title">Create A Product</h3>
+            {% endif %}
+
+        </div>
+
+        <form method="post" class="user-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="form-error-general">
+                {% for error in form.non_field_errors %}
+                <div class="error-message">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="form-container">
+                <input type="file" name="images" multiple required>
+                {% for field in form %}
+                <!-- Fields -->
+                <div class="form-field-container 
+                    {% if not update %}
+                        {% if field.errors %}has-error{% endif %}
+                    {% endif %}
+                         ">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <small class="help-text">{{ field.help_text }}</small>
+                    {% endif %}
+
+
+                    {% if not update %}
+                    {% for error in field.errors %}
+                    <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if update %}
+            <div class="buttons"
+                style="display: flex; align-items: center; justify-content: space-between; gap: 1.5em; ">
+                <button type="submit" class="submit-button update-btn" style="flex: 3;">
+                    <i class="fa fa-pencil-square-o icon-left"></i> Update
+                </button>
+                
+            </div>
+            {% else %}
+            <button type="submit" class="submit-button">Register</button>
+            {% endif %}
+
+        </form>
+
+    </div>
+
+    <style>
+        /* === NEW & MODIFIED STYLES === */
+        .icon-left {
+            margin-right: 8px;
+            /* Spacing for the icon */
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .delete-btn {
+            background-color: #777 !important;
+            /* Muted color for Delete button */
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn:hover {
+            background-color: #555 !important;
+        }
+
+        .delete-link {
+            text-decoration: none;
+            /* Removes underline from the anchor tag */
+        }
+
+        /* --- Input Styling (Refined Focus) --- */
+        .user-form input:focus,
+        .user-form textarea:focus,
+        .user-form select:focus {
+            border-color: #d10024;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(209, 0, 36, 0.2);
+            /* Added subtle focus ring */
+        }
+
+        /* ================================== */
+        /* === ORIGINAL STYLES (Kept) === */
+        /* ================================== */
+
+        /* --- Section Title --- */
+        .section-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            font-size: 1.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #d10024;
+            border-radius: 5px;
+        }
+
+        /* --- Flex Container for Forms --- */
+        .forms-container {
+            display: flex;
+            gap: 2em;
+            flex-wrap: wrap;
+            /* responsive */
+        }
+
+        .form-container {
+            flex: 1 1 300px;
+            /* grow, shrink, basis */
+        }
+
+        .form-field-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* --- Input Styling --- */
+        .user-form input:not([type="submit"]),
+        .user-form textarea,
+        .user-form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        /* --- Highlight Fields with Errors --- */
+        .has-error input,
+        .has-error textarea,
+        .has-error select {
+            border-color: #dc3545;
+            background-color: #fbeaea;
+        }
+
+        /* --- Error Messages --- */
+        .error-message {
+            font-size: 0.9em;
+            color: #dc3545;
+            margin-top: 5px;
+            padding: 5px;
+            border: 1px solid #f5c6cb;
+            background-color: #f8d7da;
+            border-radius: 4px;
+        }
+
+        .form-error-general {
+            margin-bottom: 15px;
+        }
+
+        .help-text {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* --- Submit Button --- */
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #d10024;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #97021b;
+        }
+
+        .form-container textarea {
+            max-height: 100px;
+        }
+    </style>
+</div>
+{% endblock content %}

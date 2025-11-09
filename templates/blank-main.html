@@ -1,0 +1,246 @@
+{% load static %} {% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>Electro - HTML Ecommerce Template</title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="{% static 'css/slick.css' %}" />
+	<link type="text/css" rel="stylesheet" href="{% static 'css/slick-theme.css' %}" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="{% static 'css/nouislider.min.css' %}" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js' %}"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js' %}"></script>
+		<![endif]-->
+
+	<style>
+		.notification {
+			position: fixed;
+			top: 30px;
+			right: 30px;
+			background: #fff;
+			padding: 15px 25px;
+			border-radius: 12px;
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+			opacity: 0;
+			transform: translateY(-20px);
+			transition: all 0.4s ease;
+			z-index: 9999;
+		}
+
+		.notification.show {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		.notification.hide {
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+
+		.notification.success {
+			border-left: 5px solid #50c878;
+		}
+
+		.notification.error {
+			border-left: 5px solid #d10024;
+		}
+
+		.notification.info {
+			border-left: 5px solid #c792ea;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	{% if messages %}
+	{% for message in messages %}
+	<div id="notification" class="notification {{ message.tags }}">
+		{{ message }}
+	</div>
+	{% endfor %}
+	{% endif %}
+
+
+
+	<!-- HEADER -->
+	<header>
+		<!-- MAIN HEADER -->
+		<div id="header">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row" style="display: flex; align-items: center; justify-content: space-between;">
+					<!-- LOGO -->
+					<div class="col-md-3">
+						<div class="header-logo">
+
+							{% if request.resolver_match.namespace == 'manager' %}
+							<a href="{% url 'manager:home' %}" class="logo">
+								<img src="{% static 'img/logo.png' %}" alt="">
+							</a>
+							{% elif request.resolver_match.namespace == 'employee' %}
+							<a href="{% url 'employee:home' %}" class="logo">
+								<img src="{% static 'img/logo.png' %}" alt="">
+							</a>
+							{% else %}
+							<a href="{% url 'home' %}" class="logo">
+								<img src="{% static 'img/logo.png' %}" alt="">
+							</a>
+							{% endif %}
+
+						</div>
+					</div>
+					<!-- /LOGO -->
+					<nav class="main-header-nav">
+						<ul class="header-list">
+							{% if request.resolver_match.namespace == 'manager' %}
+
+							{% with current_view=request.resolver_match.view_name %}
+
+							<li class="nav-item">
+								<a href="{% url 'manager:all-employees' %}"
+									class="nav-link {% if current_view == 'all-employees' %}active{% endif %}">
+									All Employees
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'manager:create-employee' %}"
+									class="nav-link {% if current_view == 'create-employee' %}active{% endif %}">
+									Add Employee
+								</a>
+							</li>
+							<li class="nav-item logout">
+								<a href="{% url 'logout' %}" class="nav-link">
+									Log Out
+								</a>
+							</li>
+
+							{% endwith %}
+
+							{% elif request.resolver_match.namespace == 'employee' %}
+
+							{% with current_view=request.resolver_match.view_name %}
+
+							<li class="nav-item">
+								<a href="{% url 'employee:all-products' %}"
+									class="nav-link {% if current_view == 'all-products' %}active{% endif %}">
+									All Products
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'employee:create-product' %}"
+									class="nav-link {% if current_view == 'create-product' %}active{% endif %}">
+									Add Product
+								</a>
+							</li>
+							<li class="nav-item logout">
+								<a href="{% url 'logout' %}" class="nav-link">
+									Log Out
+								</a>
+							</li>
+
+							{% endwith %}
+							{% endif %}
+						</ul>
+					</nav>
+					<!-- row -->
+				</div>
+				<!-- container -->
+			</div>
+			<!-- /MAIN HEADER -->
+	</header>
+	<!-- /HEADER -->
+
+
+	{% block content %}
+
+	{% endblock content %}
+
+	{% include 'footer.html' %}
+<style>
+	/* 1. Reset and Container Styling */
+.main-header-nav {
+  /* This ensures the nav can sit nicely in a header, perhaps alongside a true logo */
+  width: 100%;
+}
+
+.header-list {
+  /* Remove list default styling */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  /* Create a horizontal row for the links */
+  display: flex;
+  justify-content: flex-end; /* Push links to the right */
+  align-items: center;
+  gap: 1.5rem; /* Space between links */
+}
+
+/* 2. Link Styling (The "Niceness" Factor) */
+.nav-link {
+  /* Typography */
+  text-decoration: none;
+  font-weight: 500; /* Slightly bold text */
+  font-size: 1.5rem;
+  padding: 0.5rem 0.7rem; /* Padding for visual space and click target */
+	color: #fff;
+  /* Transition for smooth hover effect */
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  
+  /* A nice touch: a subtle underline that appears on hover */
+  border-bottom: 2px solid transparent; 
+}
+
+/* 3. Interactive/State Styling (UX) */
+.nav-link:hover {
+  color: #007bff; /* Primary brand color on hover */
+  border-bottom: 2px solid #007bff; /* Underline effect */
+}
+
+/* 4. Active Link Styling (CRUCIAL UX) */
+.nav-link.active {
+  color: #007bff; /* Make the active link stand out */
+  font-weight: 700;
+  border-bottom: 2px solid #007bff;
+}
+
+/* 5. Logout Link (To make it visually distinct) */
+.nav-item.logout .nav-link {
+    color: #dc3545; /* Red for 'Log Out' */
+}
+
+.nav-item.logout .nav-link:hover {
+    color: #a71d2a;
+    border-bottom: 2px solid #a71d2a;
+}
+</style>
+</body>
+
+</html>

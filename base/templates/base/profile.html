@@ -1,0 +1,169 @@
+{% extends 'main.html' %}
+{% load static %} {% load humanize %}
+{% block content %}
+
+
+  <style>
+
+    .profile-container {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      max-width: 800px;
+      margin: 4em auto;
+    }
+    .profile-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .profile-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #ddd;
+    }
+    .profile-header h2 {
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    .profile-info .list-group-item {
+      border: none;
+      border-bottom: 1px solid #eee;
+      font-size: 15px;
+    }
+    .profile-info .fa {
+      width: 25px;
+      text-align: center;
+      color: #337ab7;
+    }
+    .cart-section {
+      margin-top: 30px;
+    }
+    .cart-section h3 {
+      margin-bottom: 20px;
+    }
+    .cart-item {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+<div class="container">
+  <div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <img src="{{user.photo.url}}" alt="User Photo">
+      <h2>{{user}}</h2>
+      <p><i class="fa fa-envelope"></i> {{user.email}}</p>
+    </div>
+
+    <!-- Profile Info -->
+    <ul class="list-group profile-info">
+      <li class="list-group-item"><i class="fa fa-money"></i> <strong>Balance:</strong> ${{user.customerprofile.balance|intcomma}}</li>
+      <li class="list-group-item"><i class="fa fa-home"></i> <strong>Address:</strong> {{user.customerprofile.address}}</li>
+      <li class="list-group-item"><i class="fa fa-phone"></i> <strong>Phone:</strong> {{user.customerprofile.phone_number}}</li>
+    </ul>
+
+    <!-- Cart Section -->
+    <div class="cart-section">
+      <h3><i class="fa fa-shopping-cart"></i> Your Cart</h3>
+			
+
+			{% if cart.products.count > 0 %}
+
+
+			{% for item in cart_items %}
+
+			<!-- product -->
+			<div class="product" style="display: flex; align-items: center; justify-content: space-between;">
+				<div class="product-body" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; flex:1; padding: 1em .5em; margin: 0;">
+					<p class="product-category">{{item.product.category}}</p>
+					<h3 class="product-name">
+						<a href="#">{{item.product.name}}</a>
+					</h3>
+					<h4 class="product-price">${{item.product.price|intcomma}}</h4>
+					<h4 class="product-price">x{{item.quantity}}</h4>
+				</div>
+				<button class="delete">
+					<a href="{% url 'delete-from-cart' item.product.id %}"><i class="fa fa-close"></i></a>
+				</button>
+			</div>
+
+			{% endfor %}
+		</div>
+
+		<div class="cart-summary">
+			<small>{{cart.products.count}} Item(s) selected</small>
+			<h4>SUBTOTAL: ${{total_price|intcomma}}</h4>
+		</div>
+		<div class="cart-btns">
+			<a href="{% url 'checkout' user.id %}">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+		</div>
+		{% else %}
+		<p style="text-align: center;">No Products Here...</p>
+		{% endif %}
+		<!-- /row -->
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+
+	.container .cart-btns {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		margin: 0;
+	}
+
+	.container .cart-btns a {
+		display: inline-block;
+		width: calc(30% - 0px);
+		padding: 12px;
+		background-color: #d10024;
+		color: #fff;
+		text-align: center;
+		font-weight: 700;
+		-webkit-transition: 0.2s all;
+		transition: 0.2s all;
+		margin: 0;
+	}
+  .product .product-body *{
+    margin: 0;
+  }
+  .product .delete{
+		display: inline-block;
+		/* padding: .5em; */
+    width: 32px;
+    height: 32px;
+		background-color: #d10024;
+		color: #fff;
+		text-align: center;
+		font-weight: 700;
+		-webkit-transition: 0.2s all;
+		transition: 0.2s all;
+		margin: 0 .5em;
+    border: none;
+    border-radius: .3em;
+  }
+
+  .product .delete a{
+    color: white;
+  }
+  .product .delete:hover{
+    background-color: rgb(216, 216, 216);
+    color: #d10024;
+  }
+  .product .delete:hover a{
+    color: #d10024;
+  }
+</style>
+
+
+{% endblock content %}

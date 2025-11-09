@@ -1,0 +1,107 @@
+{% load static %} {% load humanize %}
+<!-- FOOTER -->
+<footer id="footer">
+  <!-- top footer -->
+  <div class="section">
+    <!-- container -->
+    <div class="container">
+      <!-- row -->
+      <div class="row">
+        <div class="col-md-3 col-xs-6" style="width: fit-content;">
+          <div class="footer">
+            <h3 class="footer-title">About Me</h3>
+            <p>I'm Mohamed, a passionate  web developer, and graphic designer. I enjoy building clean,
+              functional designs and exploring new technologies that make life easier.</p>
+            <ul class="footer-links"
+              style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 4em; padding-top: 1em;">
+              <div>
+
+                <li><a href="http://googleusercontent.com/maps.google.com/2" target="_blank"><i
+                      class="fa fa-map-marker"></i>Sudan, Khartoum, Omdurman</a></li>
+                <li><a href="tel:+249111696468"><i class="fa fa-phone"></i>+249111696468</a></li>
+                <li><a href="mailto:mohammedalhbyb@gmail.com"><i
+                      class="fa fa-envelope-o"></i>mohammedalhbyb@gmail.com</a></li>
+              </div>
+              <div>
+
+                <li><a href="http://wa.me/249111696468" target="_blank"><i class="fa fa-whatsapp"></i>Me On WhatsApp</a>
+                </li>
+                <li><a href="http://t.me/pasha21_6" target="_blank"><i class="fa fa-telegram"></i>Me On Telegram</a>
+                </li>
+                <li><a href="http://t.me/pasha21_6" target="_blank"><i class="fa fa-youtube-play"></i>Youtube
+                    Channel</a></li>
+              </div>
+              <div>
+                <li class="github"><a href="http://github.com/M-Alhbyb" target="_blank"><i class="fa fa-github"></i>Github
+                  Repo</a></li>
+                </div>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <!-- /row -->
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /top footer -->
+
+  <!-- bottom footer -->
+  <div id="bottom-footer" class="section" style="padding: 0; margin: 0; padding-bottom: 2em;">
+    <div class="container">
+      <!-- row -->
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <span class="copyright">
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;
+            <script>document.write(new Date().getFullYear());</script> All rights reserved 
+            <hr style="display: block; max-width: 20%; margin: .5em auto; background-color: #d10024; color: #d10024; border-color: #d10024;">
+            This Frontend template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"target="_blank">Colorlib</a>
+            <br>
+            Enhanced And Backend By <strong> Mohammed Alhbyb <a>Pasha</a> </strong>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </span>
+        </div>
+      </div>
+      <!-- /row -->
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /bottom footer -->
+</footer>
+<!-- /FOOTER -->
+<style>
+  .github {
+    font-size: 3rem;
+
+    /* height: 100%; */
+    padding: .8em;
+    border: 2px dashed #ccc;
+  }
+
+  .github i {
+    padding-right: 1em;
+  }
+</style>
+<script>
+
+  // Auto-show Django message popups
+  window.addEventListener('DOMContentLoaded', () => {
+    const notification = document.getElementById('notification');
+    if (notification) {
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.add('hide');
+      }, 5000); // Hide after 5 seconds
+    }
+  });
+</script>
+
+<!-- jQuery Plugins -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/slick.min.js' %}"></script>
+<script src="{% static 'js/nouislider.min.js' %}"></script>
+<script src="{% static 'js/jquery.zoom.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>

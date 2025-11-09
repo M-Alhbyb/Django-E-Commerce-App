@@ -1,0 +1,76 @@
+{% extends 'main.html' %}
+{% load static %} {% load humanize %}
+{% block content %}
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+  <!-- container -->
+  <div class="container">
+    <!-- row -->
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="breadcrumb-header">{{category}}</h3>
+        <ul class="breadcrumb-tree">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li class="active">{{category}}</li>
+        </ul>
+      </div>
+    </div>
+    <!-- /row -->
+  </div>
+  <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+  <!-- container -->
+  <div class="container">
+    <!-- row -->
+    <div class="row ctgry-cntnr">
+
+      {% for product in products %}
+      <!-- product -->
+      {% include 'base/partials/product.html' %}
+      <!-- /product -->
+      {% endfor %}
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+</div>
+<!-- /row -->
+</div>
+<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+
+
+
+<style>
+  .ctgry-cntnr {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1em;
+    margin-top: 0;
+    padding-top: 0;
+    margin-bottom: 3em;
+  }
+
+  .ctgry-cntnr::before {
+    display: none;
+  }
+
+  .ctgry-cntnr .product {
+    margin: 0;
+  }
+</style>
+
+{% endblock content %}

@@ -1,0 +1,209 @@
+{% extends 'main.html' %}
+{% load static %} {% load humanize %}
+{% load custom_tags %}
+{% block content %}
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Add to Cart</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="{% url 'home' %}">Home</a></li>
+					<li class="active">Add To Cart</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section add-to-cart-sec">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+			<div class="product">
+				<h6></h6>
+				<h6>Category</h6>
+				<h6>Product</h6>
+				<h6>Price</h6>
+				<h6>Quantity</h6>
+				<h6></h6>
+			</div>
+
+			<form class="product" method="POST">
+				{% csrf_token %}
+				<div class="product-img">
+					<img src="{% static 'img/products/default-product.png' %}" alt="" />
+				</div>
+				<div class="product-body">
+					<p class="product-category">{{product.category|title}}</p>
+				</div>
+				<div class="product-body">
+					<h3 class="product-name">
+						<a href="#">{{product.name}}</a>
+					</h3>
+				</div>
+				<div class="product-body">
+
+					<h4 class="product-price">
+						${{product.price|intcomma}}
+					</h4>
+
+				</div>
+					<div class="input-number">
+						<input type="number" name="quantity" id="quantity" value="1" min="1">
+						<span class="qty-up">+</span>
+						<span class="qty-down">-</span>
+				</div>
+				<button class="add-to-cart-btn cart-btns">
+					<i class="fa fa-shopping-cart "></i> add to cart
+				</button>
+			</form>
+			<!-- /product -->
+
+
+
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+
+<style>
+	.add-to-cart-sec .product {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: .5em;
+		padding: 1em;
+	}
+
+	.add-to-cart-sec .product-img {
+		flex: 0 0 5.5em;
+	}
+
+	.add-to-cart-sec .product-body {
+		flex: 1 1 150px;
+		min-width: 120px;
+	}
+
+	.add-to-cart-sec .input-number {
+		flex: 0 0 120px;
+		display: flex;
+		align-items: center;
+		gap: .25em;
+	}
+
+	.add-to-cart-sec .cart-btns {
+		flex: 0 0 auto;
+	}
+
+	/* Tablet / small desktop */
+	@media (max-width: 768px) {
+		.add-to-cart-sec .product {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.add-to-cart-sec .product h6 {
+			width: 100%;
+			min-width: 100%;
+		}
+
+		.add-to-cart-sec .product-img {
+			margin: .25em 0;
+			align-self: center;
+			flex: 0 0 auto;
+		}
+
+		.add-to-cart-sec .product-body {
+			width: 100%;
+			min-width: 0;
+			flex: 1;
+		}
+
+		.add-to-cart-sec .input-number,
+		.add-to-cart-sec .container .cart-btns {
+			width: 100%;
+			margin-top: .5em;
+			flex: 0 0 auto;
+		}
+
+		.add-to-cart-sec .input-number {
+			justify-content: flex-start;
+		}
+	}
+
+	/* Mobile */
+	@media (max-width: 480px) {
+		.add-to-cart-sec .product-body {
+			margin: 0;
+			padding: 0;
+		}
+		.add-to-cart-sec .product-img img {
+			height: 4.5em;
+		}
+
+		.add-to-cart-sec #quantity {
+			padding: .25em 0;
+			font-size: .95rem;
+		}
+
+		.add-to-cart-sec .product h6 {
+			font-size: .95rem;
+		}
+	}
+
+	.add-to-cart-sec .product-img img {
+		height: 5em;
+	}
+
+	.add-to-cart-sec .product h6 {
+		min-width: calc(100%/6);
+		width: calc(100%/6);
+		/* text-align: center; */
+	}
+
+	.add-to-cart-sec #quantity {
+		display: inline-block;
+		color: #d10024;
+		border: 1px solid #d10024;
+		border-radius: 1em;
+		text-align: center;
+		padding: .3em 0;
+		font-weight: 700;
+	}
+
+	.add-to-cart-sec .container .cart-btns {
+		display: inline-block;
+		padding: 0.3em .5em;
+		background-color: #d10024;
+		color: #fff;
+		border: none;
+		border-radius: 1em;
+		text-align: center;
+		font-weight: 700;
+		-webkit-transition: 0.2s all;
+		transition: 0.2s all;
+		margin: 0;
+	}
+
+	.add-to-cart-sec .container .cart-btns:hover {
+		background-color: #dbdbdb;
+		color: #d10024;
+	}
+</style>
+{% endblock content %}

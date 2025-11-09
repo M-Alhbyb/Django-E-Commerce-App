@@ -1,0 +1,280 @@
+{% extends 'blank-main.html' %} {% load static %} {% load humanize %} {% block content %}
+<!-- SECTION Employee-->
+
+<div class="section">
+  <!-- container -->
+  <div class="container">
+    <!-- row -->
+    <div class="row">
+      <!-- section title -->
+      <div class="col-md-12">
+        <div class="section-title">
+          <h3 class="title">Employee Profile</h3>
+        </div>
+      </div>
+      <!-- /section title -->
+
+      <div class="col-md-12 profile-col">
+        <div class="row">
+
+          <div class="employee profile-container product">
+            <!-- Profile Header -->
+            <div class="profile-header">
+              <img src="{{employee.photo.url}}" alt="Employee Photo">
+              <h2>{{employee.first_name}} {{employee.last_name}}</h2>
+              <p><i class="fa fa-envelope"></i> {{employee.email}}</p>
+            </div>
+
+            <div class="employee-details">
+              <div class="card">
+                <div class="card-header">
+                  <i class="fa fa-user"></i> Personal Details
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <i class="fa fa-id-card-o"></i> <strong>Name:</strong>
+                    {{employee.first_name}} {{employee.last_name}}
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-phone"></i> <strong>Phone:</strong>
+                    {{employee.employeeprofile.phone_number}}
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-envelope-o"></i> <strong>Email:</strong>
+                    {{employee.email}}
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-home"></i> <strong>Address:</strong>
+                    {{employee.employeeprofile.address}}
+                  </li>
+                </ul>
+              </div>
+              <div class="card mt-3">
+                <div class="card-header">
+                  <i class="fa fa-briefcase"></i> Job Details
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <i class="fa fa-money"></i> <strong>Salary:</strong>
+                    ${{employee.employeeprofile.salary}}
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-calendar-check-o"></i> <strong>Date Hired:</strong>
+                    {{employee.employeeprofile.date_hired}}
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-sitemap"></i> <strong>Department:</strong>
+                    {{current_department.1}}
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-black-tie"></i> <strong>Position:</strong>
+                    {{current_position.1}}
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-heartbeat"></i> <strong>Status:</strong>
+                    {{employee.employeeprofile.status}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="employee-actions" aria-label="Employee Options">
+              <!-- Edit Button: FA 4.7 Pencil Icon -->
+              <a href="{% url 'manager:edit-employee' employee.id %}">
+                <button class="action-btn edit" title="Edit Employee">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>
+              </a>
+
+
+
+              <!-- Remove Button: FA 4.7 Trash Icon, using the requested color #d10024 -->
+              <a href="{% url 'manager:delete-employee' employee.id %}">
+                <button class="action-btn remove" title="Remove Employee">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+              </a>
+            </div>
+
+
+          </div>
+
+
+          <div id="slick-nav-employees-all" class="products-slick-nav"></div>
+        </div>
+      </div>
+      <!-- /row -->
+    </div>
+    <!-- /container -->
+
+  </div>
+  <!-- /SECTION -->
+  <style>
+    .section-title {
+      /* Text Style */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* A modern font */
+      color: #333;
+      /* Darker, sophisticated text */
+      font-size: 1.8em;
+      /* A bit larger */
+      font-weight: 600;
+      /* Semi-bold */
+      text-transform: uppercase;
+      /* All caps for impact */
+      letter-spacing: 1px;
+      /* Slight spacing for readability */
+      padding-bottom: 5px;
+      /* Space for the line */
+
+      /* The "Prettiness" - The Line Effect */
+      position: relative;
+      /* Needed for the pseudo-element */
+    }
+
+    /* Create the styled line underneath */
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      /* A short, impactful line */
+      height: 3px;
+      background-color: #d10024;
+      /* A primary brand color (e.g., blue) */
+      border-radius: 5px;
+      /* Rounded edges for a softer look */
+    }
+
+    .profile-container {
+      background: #f3f2f217;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      max-width: 800px;
+      margin: 1em auto;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .profile-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #ddd;
+      margin: 0 auto;
+    }
+
+    .profile-header h2 {
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    .profile-info .list-group-item {
+      border: none;
+      border-bottom: 1px solid #eee;
+      font-size: 15px;
+    }
+
+    .profile-info .fa {
+      width: 25px;
+      text-align: center;
+      color: #d10024;
+    }
+
+    /* --- Custom Button Styling --- */
+
+    /* Container for spacing and alignment */
+    .employee-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Base style for all action buttons */
+    .action-btn {
+      background-color: #f0f0f0;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      /* Rounded corners */
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #666;
+      /* Default icon color */
+      transition: all 0.2s ease-in-out;
+      line-height: 1;
+      /* Center the icon vertically */
+      outline: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Hover effect - universal lift */
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- Specific Action Colors --- */
+
+    /* Edit Button (Yellow/Neutral) */
+    .action-btn.edit:hover {
+      border-color: #ffc107;
+      color: #ffc107;
+      background-color: #fff8e1;
+    }
+
+    /* View Button (Blue/Primary) */
+    .action-btn.view:hover {
+      border-color: #007bff;
+      color: #007bff;
+      background-color: #e6f3ff;
+    }
+
+    /* Remove Button (Requested Red Color: #d10024) */
+    .action-btn.remove {
+      color: #e0e0e0;
+      /* Default subtle red text */
+      border-color: #e0e0e0;
+    }
+
+    .action-btn.remove:hover {
+      border-color: #d10024;
+      /* Strong border on hover */
+      color: #d10024;
+      /* Strong red icon color */
+      background-color: #ffe8e8;
+      /* Very light red background */
+    }
+
+
+    .card .card-header{
+      position: relative;
+      margin-bottom: .5em;
+      padding: .5em 0;
+      font-weight: bold;
+      font-size: 1.5rem;
+      
+    }
+      .card .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      /* A short, impactful line */
+      height: 3px;
+      background-color: #d10024;
+      /* A primary brand color (e.g., blue) */
+      border-radius: 5px;
+      /* Rounded edges for a softer look */
+    }
+    .card i, .card strong{
+      padding-right: .4em;
+    }
+  </style>
+
+  {% endblock content %}

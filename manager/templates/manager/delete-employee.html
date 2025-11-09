@@ -1,0 +1,170 @@
+{% extends 'blank-main.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h3 class="title">Are You Sure You want To Delete Employee?</h3>
+                </div>
+            </div>
+            <div class="col-md-12 profile-col">
+                <div class="row">
+                  <form method="POST">
+                    {% csrf_token %}
+                    <div class="employee" style="margin: 0 1em; margin-bottom: 2em;">
+
+                        <div class="profile-header">
+                            <img src="{{employee.photo.url}}" alt="Employee Photo">
+                            <h3 style="padding-top: .5em;">{{employee.first_name}} {{employee.last_name}}</h3>
+                        </div>
+                        
+                        <div class="employee-details">
+                            <div class="card">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <i class="fa fa-id-card-o"></i> <strong>Name:</strong>
+                                        {{employee.first_name}} {{employee.last_name}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fa fa-sitemap"></i> <strong>Department:</strong>
+                                        {{current_department.1}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fa fa-black-tie"></i> <strong>Position:</strong>
+                                        {{current_position.1}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="employee-actions" aria-label="Employee Options" style="margin-top: 20px;">
+                            
+                            <a href="{% url 'manager:view-employee' employee.id %}">
+                                <div class="action-btn cancel" title="Do Not Delete Employee">
+                                    <i>No</i>
+                                </div>
+                            </a>
+
+                                <button class="action-btn remove" title="Confirm Delete Employee">
+                                    <i>Yes, Delete</i>
+                                </button>
+                        </div>
+                    </div>
+                  </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<style>
+    /* The original CSS for .profile-container, .profile-header h2, and 
+    .profile-info are not used in the HTML structure above, 
+    so they have been removed. 
+    */
+
+    /* --- General Section Title Styling --- */
+    .section-title {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        font-size: 1.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding-bottom: 5px;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: #d10024;
+        border-radius: 5px;
+    }
+
+    /* --- Employee/Profile Details Styling --- */
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .profile-header img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid #ddd;
+        margin: 0 auto;
+    }
+
+    .card .list-group-item {
+        border: none;
+        border-bottom: 1px solid #eee;
+        font-size: 1.5rem; /* Kept your list item font size */
+    }
+
+    /* Combined the .profile-info .fa with .card i for simplicity */
+    .card i {
+        width: 25px;
+        text-align: center;
+        color: #d10024;
+        padding-right: .4em;
+    }
+    
+    .card strong {
+        padding-right: .4em;
+    }
+
+
+    /* --- Custom Button Styling --- */
+    .employee-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .action-btn {
+        background-color: #f0f0f0;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #666;
+        transition: all 0.2s ease-in-out;
+        line-height: 1;
+        outline: none;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- Specific Action Colors (Edit/No) --- */
+
+    .action-btn.cancel:hover {
+        border-color: #03ad3c;
+        color: #03ad3c;
+        background-color: #fff8e1;
+    }
+
+    /* --- Specific Action Colors (Remove/Yes) --- */
+    .action-btn.remove {
+        /* color: #e0e0e0; */
+        border-color: #e0e0e0;
+    }
+
+    .action-btn.remove:hover {
+        border-color: #d10024;
+        color: #d10024;
+        background-color: #ffe8e8;
+    }
+</style>
+
+{% endblock content %}

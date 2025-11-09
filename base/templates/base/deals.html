@@ -1,0 +1,72 @@
+{% extends 'main.html' %}
+{% load static %} {% load humanize %}
+
+{% block content %}
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Hot Deals</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="{% url 'home' %}">Home</a></li>
+					<li class="active">Hot Deals</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row htdls-cntnr">
+
+
+			{% for product in products %}
+			<!-- product -->
+			{% include 'base/partials/product.html' %}
+			<!-- /product -->
+			{% endfor %}
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+
+<style>
+	.htdls-cntnr {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1em;
+		margin-top: 0;
+		padding-top: 0;
+		margin-bottom: 3em;
+	}
+
+	@media (max-width: 420px) {
+		.htdls-cntnr {
+			gap: 0.5em;
+		}
+	}
+
+  .htdls-cntnr::before {
+    display: none;
+  }
+
+  .htdls-cntnr .product {
+    margin: 0;
+  }
+</style>
+{% endblock content %}

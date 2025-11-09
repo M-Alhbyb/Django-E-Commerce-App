@@ -1,0 +1,84 @@
+{% load static %}
+{% load humanize %}
+
+<div class="container" style="padding-bottom: 2em;">
+  <div class="row">
+
+    {# ------------------ 1. SECTION TITLE & TABS ------------------ #}
+    <div class="col-md-12">
+      <div class="section-title">
+        <h3 class="title">{{ head }}</h3>
+        <div class="section-nav">
+          <ul class="section-tab-nav tab-nav">
+            {# The 'All' Tab - Make it active by default #}
+            <li class="active"><a data-toggle="tab" href="#tab-{{ title|slugify }}-all">All</a></li>
+
+            {% for category in categories %}
+            {# Use slugify for safe, unique, and readable IDs in HTML #}
+            {% with tab_id=category.name|slugify %}
+            <li><a data-toggle="tab" href="#tab-{{ title|slugify }}-{{ tab_id }}">{{ category.name|title }}</a></li>
+            {% endwith %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {# ------------------ 2. PRODUCTS TABS CONTENT ------------------ #}
+    <div class="col-md-12">
+      <div class="row">
+        <div class="products-tabs">
+
+          {# The Main Tab Content Area #}
+          <div class="tab-content">
+
+            {# ------------------ The 'All' Tab Content ------------------ #}
+            <div id="tab-{{ title|slugify }}-all" class="tab-pane fade in active">
+              <div class="products-slick" data-nav="#slick-nav-{{ title|slugify }}-all">
+                {% for product in products %}
+                {# Include all products for the "All" tab #}
+                {% include 'base/partials/product.html' %}
+                {% endfor %}
+              </div>
+            </div>
+            {# The navigation for the 'All' tab's slider #}
+            <div id="slick-nav-{{ title|slugify }}-all" class="products-slick-nav"></div>
+            {# ------------------ /The 'All' Tab Content ------------------ #}
+
+
+            {# ------------------ Loop Through Individual Category Tabs ------------------ #}
+            {% for category in categories %}
+
+            {% if category.id == 1 %}
+            <div id="tab-{{title}}-all" class="tab-pane fade in">
+              {% else %}
+              <div id="tab-{{title}}-{{category}}" class="tab-pane fade in">
+                {% endif %}
+                <div class="products-slick" data-nav="#slick-nav-{{title}}-{{category}}">
+
+                  {% for product in products %}
+                  {% if product.category == category %}
+                  {# Only include products matching the current category #}
+                  {% include 'base/partials/product.html' %}
+                  {% endif %}
+                  {% endfor %}
+
+                </div>
+              </div>
+              {# The navigation for this category's slider #}
+
+              {% if category.id == 1 %}
+              <div id="slick-nav-{{title}}-all" class="products-slick-nav"></div>
+              {% else %}
+              <div id="slick-nav-{{title}}-{{category}}" class="products-slick-nav"></div>
+              {% endif %}
+
+              {% endfor %}
+              {# ------------------ /Loop Through Individual Category Tabs ------------------ #}
+
+            </div>
+            {# /tab-content #}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

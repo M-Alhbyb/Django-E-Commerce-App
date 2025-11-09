@@ -1,0 +1,24 @@
+{% load static %} {% load humanize %}
+<!-- NAVIGATION -->
+<nav id="navigation">
+  <!-- container -->
+  <div class="container">
+    <!-- responsive-nav -->
+    <div id="responsive-nav">
+      <!-- NAV -->
+      <ul class="main-nav nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="{% url 'hot-deals' %}">Hot Deals</a></li>
+        <li><a href="{% url 'all-products' %}">All</a></li>
+
+        {% for category in categories %}
+        <li><a href="{% url 'categories' category.id %}">{{category|title}}</a></li>
+        {% endfor %}
+      </ul>
+      <!-- /NAV -->
+    </div>
+    <!-- /responsive-nav -->
+  </div>
+  <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->

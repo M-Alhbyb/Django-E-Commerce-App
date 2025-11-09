@@ -1,0 +1,369 @@
+{% extends 'blank-main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <div class="section-title">
+
+            {% if update %}
+            <h3 class="title">Update An Employee</h3>
+            {% else %}
+            <h3 class="title">Create An Employee</h3>
+            {% endif %}
+
+        </div>
+
+        <form method="post" class="user-form" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="form-error-general">
+                {% for error in form.non_field_errors %}
+                <div class="error-message">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if profileForm.non_field_errors %}
+            <div class="form-error-general">
+                {% for error in profileForm.non_field_errors %}
+                <div class="error-message">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="forms-container">
+
+                <div class="form-container">
+                    {% for field in form %}
+                    <!-- Fields -->
+                    <div class="form-field-container 
+                    {% if not update %}
+                        {% if field.errors %}has-error{% endif %}
+                    {% endif %}
+                         ">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+
+
+                        {% if not update %}
+                        {% for error in field.errors %}
+                        <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% if field.name == 'username' %}
+                    {% if not update %}
+                    <div class="form-field-container">
+                        <label for="id_password" class="form-label">Password</label>
+                        <input type="password" name="password" id="id_password" class="form-input" required>
+                    </div>
+                    <div class="form-field-container">
+                        <label for="id_password2" class="form-label">Password Again</label>
+                        <input type="password" name="password2" id="id_password2" class="form-input" required>
+                    </div>
+                    {% endif %}
+
+                    {% endif %}
+
+                    {% endfor %}
+                </div>
+
+                <div class="form-container">
+                    {% for field in profileForm %}
+                    <div class="form-field-container {% if field.errors %}has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    <div class="my-fields">
+                        <label for="id_department">Department</label>
+                        <select name="department" id="id_department" class="select"
+                            style="display: block; width: 100%; margin: .5em 0;" required>
+                            {% if update %}
+                            <option value="{{current_department.0}}" id="current_department">{{current_department.1}}
+                            </option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="my-fields" style="margin-bottom: 1em;">
+                        <label for="id_position" style="margin-top: 1em;">Position</label>
+                        <select name="position" id="id_position" class="select"
+                            style="display: block; width: 100%; margin: .5em 0;" required>
+
+                            {% if update %}
+                            <option value="{{current_position}}" id="current_position">{{current_position}}</option>
+                            {% endif %}
+
+                        </select>
+                    </div>
+                    {% if update %}
+                    {% include 'manager/employee-password.html' %}
+                    {% endif %}
+                </div>
+
+
+
+            </div>
+
+            {% if update %}
+            <div class="buttons"
+                style="display: flex; align-items: center; justify-content: space-between; gap: 1.5em; ">
+                <button type="submit" class="submit-button update-btn" style="flex: 3;">
+                    <i class="fa fa-pencil-square-o icon-left"></i> Update
+                </button>
+                <a href="{% url 'manager:delete-employee' employee.id %}" class="delete-link"
+                    style="flex: 1; text-align: center;">
+                    <button type="button" class="submit-button delete-btn">
+                        <i class="fa fa-trash-o icon-left"></i> Delete
+                    </button>
+                </a>
+            </div>
+            {% else %}
+            <button type="submit" class="submit-button">Register</button>
+            {% endif %}
+
+        </form>
+    </div>
+
+    <style>
+        /* === NEW & MODIFIED STYLES === */
+        .icon-left {
+            margin-right: 8px;
+            /* Spacing for the icon */
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .delete-btn {
+            background-color: #777 !important;
+            /* Muted color for Delete button */
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn:hover {
+            background-color: #555 !important;
+        }
+
+        .delete-link {
+            text-decoration: none;
+            /* Removes underline from the anchor tag */
+        }
+
+        /* --- Input Styling (Refined Focus) --- */
+        .user-form input:focus,
+        .user-form textarea:focus,
+        .user-form select:focus {
+            border-color: #d10024;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(209, 0, 36, 0.2);
+            /* Added subtle focus ring */
+        }
+
+        /* ================================== */
+        /* === ORIGINAL STYLES (Kept) === */
+        /* ================================== */
+
+        /* --- Section Title --- */
+        .section-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            font-size: 1.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #d10024;
+            border-radius: 5px;
+        }
+
+        /* --- Flex Container for Forms --- */
+        .forms-container {
+            display: flex;
+            gap: 2em;
+            flex-wrap: wrap;
+            /* responsive */
+        }
+
+        .form-container {
+            flex: 1 1 300px;
+            /* grow, shrink, basis */
+        }
+
+        .form-field-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* --- Input Styling --- */
+        .user-form input:not([type="submit"]),
+        .user-form textarea,
+        .user-form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        /* --- Highlight Fields with Errors --- */
+        .has-error input,
+        .has-error textarea,
+        .has-error select {
+            border-color: #dc3545;
+            background-color: #fbeaea;
+        }
+
+        /* --- Error Messages --- */
+        .error-message {
+            font-size: 0.9em;
+            color: #dc3545;
+            margin-top: 5px;
+            padding: 5px;
+            border: 1px solid #f5c6cb;
+            background-color: #f8d7da;
+            border-radius: 4px;
+        }
+
+        .form-error-general {
+            margin-bottom: 15px;
+        }
+
+        .help-text {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* --- Submit Button --- */
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #d10024;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #97021b;
+        }
+    </style>
+</div>
+
+<script>
+    const departments = {{ departments_json| safe }};
+
+    // 1. Define the positions data structure from your Python backend
+    // This assumes your Django view passes this dictionary to the template context
+    const POSITIONS_BY_DEPARTMENT = {{ positions_by_department_json| safe }};
+
+    // 2. Get references to the select fields
+    const departmentSelect = document.getElementById('id_department');
+    const positionSelect = document.getElementById('id_position');
+
+    const currentDepartmentSelect = document.getElementById('current_department');
+    const cuurentPositionSelect = document.getElementById('current_position');
+    if (currentDepartmentSelect) {
+        departments.forEach(department => {
+            if (department[0] != currentDepartmentSelect.value){
+            const option = document.createElement('option');
+            option.value = department[0]; // The value sent to the server
+            option.text = department[1];  // The text displayed to the user
+            departmentSelect.appendChild(option);
+            }
+        });
+        currentDepartmentSelect.addEventListener('change', department_position_refresh())
+    } else {
+        departments.forEach(department => {
+            const option = document.createElement('option');
+            option.value = department[0]; // The value sent to the server
+            option.text = department[1];  // The text displayed to the user
+            departmentSelect.appendChild(option);
+        });
+        department_position_refresh()
+    }
+
+    function department_position_refresh() {
+
+
+
+        // 3. Define the function to update the Position field
+        function updatePositionOptions() {
+            // Get the currently selected department value
+            const selectedDepartment = departmentSelect.value;
+
+            // Get the array of positions for the selected department
+            // Use an empty array if the department is not found (or if nothing is selected)
+            const positions = POSITIONS_BY_DEPARTMENT[selectedDepartment] || [];
+
+            // Clear existing options in the Position field
+            positionSelect.innerHTML = '';
+
+            // Add new options
+            if (positions.length === 0) {
+                const defaultOption = document.createElement('option');
+                defaultOption.text = 'No positions available';
+                defaultOption.value = '';
+                positionSelect.appendChild(defaultOption);
+            } else {
+                // // Optional: Add a placeholder option
+                // const placeholderOption = document.createElement('option');
+                // placeholderOption.text = '--- Select Position ---';
+                // placeholderOption.value = '';
+                // // positionSelect.appendChild(placeholderOption);
+
+                // Add the dynamic positions
+                positions.forEach(position => {
+                    const option = document.createElement('option');
+                    option.value = position; // The value sent to the server
+                    option.text = position;  // The text displayed to the user
+                    positionSelect.appendChild(option);
+                });
+            }
+        }
+
+        // 4. Attach the event listener
+        // The 'change' event fires when the value is committed (when focus moves off the field)
+        departmentSelect.addEventListener('change', updatePositionOptions);
+
+        // 5. Run the function once on page load
+        // This ensures the Position field is correctly populated or blanked out based on the default Department selection
+        document.addEventListener('DOMContentLoaded', updatePositionOptions);
+    }
+</script>
+{% endblock content %}

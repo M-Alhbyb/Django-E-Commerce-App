@@ -1,0 +1,286 @@
+{% load static %}
+
+<div class="container inventory-container">
+    <header class="page-header">
+        <div class="header-titles">
+            <h1>{{ page_title }}</h1>
+            <p class="subtitle">Organized by Category. <strong>{{ grouped_products|length }} Total Categories</strong>.</p>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="productSearch" onkeyup="filterProducts()" placeholder="Search product name or SKU..." class="search-input">
+            <span class="search-icon"><i class="fa fa-search"></i></span>
+        </div>
+        
+        <a href="{% url 'employee:create-product' %}" class="btn btn-primary btn-icon" data-icon="&#43;">
+             Add New Product
+        </a>
+    </header>
+
+    {% if grouped_products %}
+    
+    {% for category, products_list in grouped_products.items %}
+    
+    <section class="category-group-card">
+        {% with category_id=category|slugify %}
+        
+        <div class="category-header-toggle is-open-header" data-target="#{{ category_id }}" aria-expanded="true">
+            <h2 class="category-title">
+                <span class="category-icon">
+                    {% if "smartphones" in category|lower %}<i class="fa fa-mobile-phone"></i>
+                    {% elif "laptops" in category|lower %}<i class="fa fa-laptop"></i>
+                    {% elif "accessories" in category|lower %}<i class="fa fa-headphones"></i>
+                    {% elif "cameras" in category|lower %}<i class="fa fa-camera"></i>
+                    {% elif "tablets" in category|lower %}<i class="fa fa-tablet"></i>
+                    {% elif "apparel" in category|lower or "clothing" in category|lower %}<i class="fa fa-tag"></i>
+                    {% else %}<i class="fa fa-archive"></i>
+                    {% endif %}
+                </span>
+                {{ category }} 
+                <span class="product-count">{{ products_list|length }} items</span>
+            </h2>
+            <span class="toggle-arrow initial-open"></span> 
+        </div>
+        
+        <div id="{{ category_id }}" class="collapsible-content is-open">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name">Product Name</th>
+                            <th>SKU</th>
+                            <th class="col-price text-right">Price</th>
+                            <th class="col-stock text-center">Stock</th>
+                            <th class="col-actions text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products_list %}
+                        <tr class="product-row {% if product.stock_quantity < 10 %}row-low-stock{% endif %}">
+                            <td class="product-name-col"><strong>{{ product.name }}</strong></td>
+                            <td class="sku-col"><code class="sku-code">{{ product.sku }}</code></td>
+                            <td class="col-price text-right">${{ product.price|floatformat:2 }}</td>
+                            <td class="col-stock text-center">
+                                {% if product.stock_quantity < 10 %}
+                                <span class="stock-low">{{ product.stock_quantity }}</span>
+                                {% else %}
+                                {{ product.stock_quantity }}
+                                {% endif %}
+                            </td>
+                            <td class="col-actions text-center">
+                                <a href="{% url 'employee:update-product' product.id %}" class="btn btn-sm btn-secondary-outline">Edit</a>
+                                <a href="{% url 'employee:delete-product' product.id %}" class="btn btn-sm btn-danger-outline">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endwith %}
+    </section>
+    
+    {% endfor %}
+    
+    {% else %}
+    <div class="empty-state">
+        <p>No products found in the system.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+
+<script>
+    // --- 1. Client-Side Product Filtering (Search) ---
+    function filterProducts() {
+        const input = document.getElementById('productSearch');
+        const filter = input.value.toUpperCase();
+        const productRows = document.querySelectorAll('.product-row');
+        
+        productRows.forEach(row => {
+            // Check Product Name (1st column) and SKU (2nd column)
+            const productName = row.querySelector('.product-name-col')?.textContent || "";
+            const sku = row.querySelector('.sku-col')?.textContent || "";
+            
+            if (productName.toUpperCase().indexOf(filter) > -1 || sku.toUpperCase().indexOf(filter) > -1) {
+                row.style.display = ""; // Show row
+            } else {
+                row.style.display = "none"; // Hide row
+            }
+        });
+
+        // Optional: Hide category card if all its rows are hidden
+        document.querySelectorAll('.category-group-card').forEach(card => {
+            const visibleRows = card.querySelectorAll('.product-row:not([style*="display: none"])').length;
+            
+            if (visibleRows === 0 && filter.length > 0) {
+                card.style.display = "none";
+            } else {
+                card.style.display = "";
+            }
+        });
+    }
+
+
+    // --- 2. Collapsible Functionality (Kept from previous steps) ---
+    document.querySelectorAll('.category-header-toggle').forEach(header => {
+        // Ensure the data-target is set if missing (for robustness)
+        if (!header.hasAttribute('data-target')) {
+            const content = header.nextElementSibling;
+            if (content && content.classList.contains('collapsible-content')) {
+                header.setAttribute('data-target', `#${content.id}`);
+            }
+        }
+
+        header.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            if (!targetId) return;
+
+            const targetContent = document.querySelector(targetId);
+            const arrow = this.querySelector('.toggle-arrow');
+            
+            targetContent.classList.toggle('is-open');
+            this.classList.toggle('is-open-header');
+
+            this.setAttribute('aria-expanded', targetContent.classList.contains('is-open'));
+            arrow.classList.toggle('is-open');
+        });
+    });
+</script>
+
+<style>
+/* --- COLOR VARIABLES (THEME: #d10024) --- */
+:root {
+    --theme-primary: #d10024;
+    --theme-primary-dark: #8f0018; 
+    
+    --color-text-dark: #212529;
+    --color-text-light: #6c757d;
+    --color-background-main: #f4f6f9; /* Off-white page background */
+    --color-background-card: #ffffff; /* White card background */
+    --color-background-hover: #f7f9fc;
+    --color-border-main: #f1f1f1;
+    
+    --color-danger-alert: #dc3545;
+    --color-low-stock-bg: #fffafb; 
+    --color-count-bg: #fbe6e9;
+}
+
+/* ------------------------------------------- */
+/* --- NEW SEARCH BAR STYLES --- */
+/* ------------------------------------------- */
+.page-header {
+    /* Updated layout for header to accommodate search bar */
+    display: grid;
+    grid-template-columns: 1fr auto auto; /* Titles, Search, Button */
+    gap: 20px;
+    align-items: center;
+    
+    margin-bottom: 35px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-border-main);
+}
+
+.header-titles {
+    grid-column: 1 / 2;
+}
+
+.search-container {
+    position: relative;
+    width: 300px; /* Comfortable width for search */
+    grid-column: 2 / 3;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px 10px 40px; /* Padding for the icon */
+    border: 2px solid #ced4da;
+    border-radius: 25px; /* Pill shape for modern look */
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-input:focus {
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 3px rgba(209, 0, 36, 0.2); /* Themed focus glow */
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+}
+
+/* ------------------------------------------- */
+/* --- GENERAL STYLES (THEME #d10024) --- */
+/* ------------------------------------------- */
+.btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: var(--theme-primary);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(209, 0, 36, 0.4);
+}
+.btn-primary:hover {
+    background-color: var(--theme-primary-dark);
+    box-shadow: 0 6px 12px rgba(209, 0, 36, 0.6);
+}
+
+/* ... (Rest of the button styles remain the same) ... */
+
+.category-group-card {
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); 
+    overflow: hidden;
+}
+
+.category-header-toggle {
+    background-color: var(--color-background-card);
+    border-bottom: 1px solid var(--color-border-main);
+    /* ... */
+}
+
+.category-header-toggle.is-open-header {
+    background-color: var(--color-background-card);
+    border-bottom: 2px solid var(--theme-primary); 
+}
+
+.category-icon {
+    color: var(--theme-primary);
+}
+
+.product-count {
+    color: var(--theme-primary-dark);
+    background-color: var(--color-count-bg);
+    /* ... */
+}
+
+.data-table th {
+    background-color: var(--color-background-hover); 
+    color: var(--color-text-light);
+    /* ... */
+}
+
+.row-low-stock {
+    background-color: var(--color-low-stock-bg); 
+    border-left: 5px solid var(--color-danger-alert);
+}
+.stock-low {
+    color: var(--color-danger-alert);
+}
+</style>

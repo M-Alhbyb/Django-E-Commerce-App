@@ -1,0 +1,7 @@
+
+  <div class="employee-card">
+    <img src="{{employee.photo.url}}" alt="{{employee}} Photo" class="profile-photo">
+    <h4>{{employee}}</h4>
+    <p>{{employee.employeeprofile.department}}</p>
+    <a href="{% url 'manager:view-employee' employee.id %}">View Details</a>
+  </div>

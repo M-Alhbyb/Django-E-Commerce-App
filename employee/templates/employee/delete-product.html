@@ -1,0 +1,269 @@
+{% extends 'blank-main.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-title">
+          <h3 class="title">Are You Sure You Want To Delete Product?</h3>
+        </div>
+      </div>
+      <div class="col-md-12 profile-col">
+        <div class="row justify-content-center">
+          <form method="POST" class="form delete-form">
+            {% csrf_token %}
+            
+            <div class="delete-confirmation-card">
+                
+                <div class="product-summary">
+                    <div class="product-image-container">
+                        <img src="{{product.photo.url}}" alt="{{product.name}} Photo">
+                    </div>
+
+                    <div class="product-details">
+                        <h4 class="product-name">{{product.name}}</h4>
+                        <ul class="detail-list">
+                            <li class="detail-item">
+                              <span>
+                                <i class="fa fa-id-card-o detail-icon"></i> 
+                                <strong>Name:</strong>
+                              </span>
+                                <span>{{product.name}}</span>
+                            </li>
+                            <li class="detail-item">
+                              <span>
+                                <i class="fa fa-black-tie detail-icon"></i> 
+                                <strong>Company:</strong>
+                              </span>
+                                <span>{{product.company}}</span>
+                            </li>
+                            <li class="detail-item">
+                              <span>
+                                <i class="fa fa-sitemap detail-icon"></i> 
+                                <strong>Price:</strong>
+                              </span>
+                                <span>${{product.price|intcomma}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="product-actions">
+                    <!-- 'No' Button: Changed to a safe, green color for clarity in confirmation UI -->
+                    <a href="{% url 'employee:view-product' product.id %}" class="action-btn cancel-btn" title="Do Not Delete product">
+                        No, Keep Product
+                    </a>
+                    <!-- 'Yes' Button: Retains the primary red theme -->
+                    <button type="submit" class="action-btn delete-btn" title="Confirm Delete product">
+                        Yes, Delete Permanently
+                    </button>
+                </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+    
+    
+    
+    :root {
+        --primary-red: #d10024; 
+        --success-green: #03ad3c; 
+        --text-color: #333;
+        --light-gray: #f8f8f8;
+        --border-color: #eee;
+    }
+
+    
+    .section-title {
+        font-family: 'Inter', sans-serif;
+        color: var(--text-color);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+        padding-bottom: 5px;
+        position: relative;
+        text-align: center;
+    }
+
+    .section-title .title {
+        font-size: 1.8em;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%; 
+        transform: translateX(-50%);
+        width: 150px; 
+        height: 3px;
+        background-color: var(--primary-red);
+        border-radius: 5px;
+    }
+    
+    .delete-form {
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    
+    .delete-confirmation-card {
+
+        background: #fff;
+        border-radius: 12px;
+        
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+        padding: 30px;
+        text-align: center;
+        transition: box-shadow 0.3s ease;
+    }
+    
+    
+    .product-summary {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed var(--border-color);
+        margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+        .product-summary {
+            flex-direction: row; 
+            text-align: left;
+            align-items: flex-start;
+        }
+    }
+
+    
+    .product-image-container {
+        flex-shrink: 0;
+        width: 200px;
+        height: 200px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        background-color: var(--light-gray);
+    }
+    .product-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    
+    .product-details {
+        flex-grow: 1;
+        width: 100%;
+    }
+    .product-name {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--primary-red); 
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    @media (min-width: 768px) {
+        .product-name {
+            text-align: left;
+        }
+    }
+
+    .detail-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--light-gray);
+        font-size: 2rem;
+        color: var(--text-color);
+        line-height: 1.4;
+        justify-content: space-between; 
+    }
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+    .detail-item strong {
+        font-weight: 600;
+        color: #666;
+        margin-right: 5px;
+    }
+    
+    .detail-item span {
+        font-weight: 400;
+    }
+
+    .detail-icon {
+        color: var(--primary-red); 
+        margin-right: 10px;
+        font-size: 1.7rem;
+    }
+
+
+    
+    .product-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        padding-top: 10px;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 25px;
+        border-radius: 6px;
+        font-size: 1.3rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        border: none;
+        line-height: 1;
+    }
+
+    
+    .action-btn.cancel-btn {
+        background-color: var(--success-green);
+        color: white;
+    }
+
+    .action-btn.cancel-btn:hover {
+        background-color: #049232;
+        box-shadow: 0 6px 12px rgba(3, 173, 60, 0.3);
+        transform: translateY(-1px);
+    }
+
+    
+    .action-btn.delete-btn {
+        background-color: var(--primary-red);
+        color: white;
+    }
+
+    .action-btn.delete-btn:hover {
+        background-color: #b1001f;
+        box-shadow: 0 6px 12px rgba(209, 0, 36, 0.3);
+        transform: translateY(-1px);
+    }
+</style>
+
+{% endblock content %}

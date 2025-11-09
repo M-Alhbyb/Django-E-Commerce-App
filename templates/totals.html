@@ -1,0 +1,66 @@
+{% load static %}
+{% load humanize %}
+<div class="row totals">
+  <div class="total">
+    <i class="fa fa-money"></i>
+    <h1>
+      {{total_sales|intcomma}}</h1>
+    <h3>Sales Count</h3>
+  </div>
+  <div class="total">
+    <i class="fa fa-archive"></i>
+    <h1>
+      {{total_stock|intcomma}}</h1>
+    <h3>Stock's Items</h3>
+  </div>
+  <div class="total">
+    <i class="fa fa-tag"></i>
+    <h1>
+      ${{total_price|intcomma}}</h1>
+    <h3>Prices</h3>
+  </div>
+  <div class="total">
+    <i class="fa fa-cube"></i>
+    <h1>
+      {{total_products|intcomma}}</h1>
+    <h3>Product</h3>
+  </div>
+</div>
+<style>
+  .totals {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .totals .total {
+    flex: 1;
+    border: 1px solid #ccc;
+    transition: .4s all ease;
+    -webkit-transition: .4s all ease;
+  }
+
+  .totals .total:hover {
+    border: 1px solid #d10024;
+  }
+
+  .totals .total i {
+    display: block;
+    font-size: 4rem;
+    padding: .5em;
+    text-align: center;
+  }
+
+  .totals .total h1 {
+    text-align: center;
+
+  }
+
+  .totals .total h3 {
+    font-weight: lighter;
+    text-align: center;
+    color: rgb(71, 71, 71);
+    font-size: 2rem;
+  }
+</style>

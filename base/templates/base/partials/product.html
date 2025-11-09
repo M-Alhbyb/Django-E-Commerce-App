@@ -1,0 +1,133 @@
+{% load static %} {% load humanize %}
+{% load custom_tags %}
+<div class="product">
+  <div class="product-img">
+    <img src="{{ product.photo.url }}" alt="{{ product.name }} Photo" />
+    <div class="product-label">
+      <span class="sale">-{{product.discount}}%</span>
+
+      {% if title == "new" %}
+      <span class="new">NEW</span>
+      {% endif %}
+
+    </div>
+  </div>
+  <div class="product-body">
+    <p class="product-category">{{product.category|title}}</p>
+    <h3 class="product-name">
+      <a href="#">{{product.name}}</a>
+    </h3>
+    <h4 class="product-price">
+      ${{product.price|intcomma}}
+      <del class="product-old-price">${{product.old_price}}</del>
+    </h4>
+    <div class="product-rating">
+      {% for i in product.stars.full|times %}
+      <i class="fa fa-star"></i>
+      {% endfor %}
+
+      {% for i in product.stars.half|times %}
+      <i class="fa fa-star-half"></i>
+      {% endfor %}
+
+      {% for i in product.stars.empty|times %}
+      <i class="fa fa-star-o"></i>
+      {% endfor %}
+    </div>
+
+    <div class="product-action-buttons">
+      
+      
+    {% if request.resolver_match.app_name == 'employee' or request.user.role == 'employee'%}
+      <a href="{% url 'product' product.id %}" title="View Details">
+        <button class="action-btn view">
+          <i class="fa fa-eye" aria-hidden="true"></i>
+        </button>
+      </a>
+      
+      <a href="{% url 'employee:update-product' product.id %}" title="Edit Product">
+        <button class="action-btn edit">
+          <i class="fa fa-pencil" aria-hidden="true"></i>
+        </button>
+      </a>
+
+      <a href="{% url 'employee:delete-product' product.id %}" title="Remove Product">
+        <button class="action-btn remove">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+      </a>
+      
+      {% endif %}
+    </div>
+    {% if request.resolver_match.app_name == 'employee' or request.user.role == 'employee'%}
+    {% else %}
+
+    <a href="{% url 'product' product.id %}" class="add-to-cart" style="display: block; position: static; background: none; transition: none; transform: none; padding: 0; margin: 0;">
+
+    <button class="add-to-cart-btn">
+
+      <i class="fa fa-eye"></i> view
+
+    </button>
+
+  </a> 
+    {% endif %}
+  </div>
+    
+    {% if request.resolver_match.app_name == 'employee' or request.resolver_match.app_name == 'manager' or request.user.role == 'employee' or request.user.role == 'manager'%}
+    {% else %}  
+    <div class="add-to-cart">
+      <a href="{% url 'add-to-cart' product.id %}">
+        <button class="add-to-cart-btn">
+          <i class="fa fa-shopping-cart "></i> add to cart
+        </button>
+      </a>
+    </div>
+    {% endif %}
+      
+<style>
+  .product{
+    position: relative;
+  }
+  /* Style for the container of the action buttons */
+  .product-action-buttons {
+    display: flex; /* Aligns buttons horizontally */
+    gap: 5px; /* Adds space between buttons */
+    margin-top: 10px; /* Space above the button group */
+    justify-content: center; /* Centers the buttons in the product card */
+}
+
+/* Base style for all action buttons */
+.action-btn {
+    border: none;
+    border-radius: 50%; /* Makes the button round */
+    width: 30px; /* Adjust size as needed */
+    height: 30px;
+    cursor: pointer;
+    color: white; /* Icon color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    padding: 0;
+}
+
+/* Specific colors for each button type */
+.action-btn.edit {
+    background-color: #333; /* Blue for Edit */
+}
+
+.action-btn.view {
+    background-color: #03a529; /* Green for View */
+}
+
+.action-btn.remove {
+    background-color: #d10024; /* Red for Remove/Delete */
+}
+
+/* Hover effect */
+.action-btn:hover {
+    opacity: 0.8;
+}
+</style>
+</div>

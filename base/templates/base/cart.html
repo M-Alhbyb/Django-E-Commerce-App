@@ -1,0 +1,114 @@
+{% extends 'main.html' %} {% load static %} {% load humanize %} {% block content %}
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Cart</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="{% url 'home' %}">Home</a></li>
+					<li class="active">Cart</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row crt-prdcts">
+
+			{% if products.count > 0 %}
+
+
+			{% for product in products %}
+
+			<!-- product -->
+			<div class="product">
+				<a href="{% url 'delete-from-cart' product.id %}">
+					<button class="delete">
+					<i class="fa fa-close"></i>
+				</button>
+				</a>
+				<div class="product-img">
+					<img src="{{ product.photo.url }}" alt="" />
+					<div class="product-label"></div>
+				</div>
+				<div class="product-body">
+					<p class="product-category">{{product.category}}</p>
+					<h3 class="product-name">
+						<a href="#">{{product.name}}</a>
+					</h3>
+					<h4 class="product-price">${{product.price|intcomma}}</h4>
+				</div>
+			</div>
+
+			{% endfor %}
+		</div>
+
+		<div class="cart-summary">
+			<small>{{cart.products.count}} Item(s) selected</small>
+			<h5>SUBTOTAL: ${{total_price}}</h5>
+		</div>
+		<div class="cart-btns">
+			<a href="{% url 'checkout' user.id %}">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+		</div>
+		{% else %}
+		<p style="text-align: center;">No Products Here...</p>
+		{% endif %}
+		<!-- /row -->
+
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+<style>
+	.crt-prdcts {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+		gap: 1em;
+		margin-top: 0;
+		padding-top: 0;
+		margin-bottom: 3em;
+	}
+
+	.crt-prdcts::before {
+		display: none;
+	}
+
+	.crt-prdcts .product {
+		margin: 0;
+	}
+
+	.container .cart-btns {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		margin: 0;
+	}
+
+	.container .cart-btns a {
+		display: inline-block;
+		width: calc(30% - 0px);
+		padding: 12px;
+		background-color: #d10024;
+		color: #fff;
+		text-align: center;
+		font-weight: 700;
+		-webkit-transition: 0.2s all;
+		transition: 0.2s all;
+		margin: 0;
+	}
+</style>
+{% endblock content %}
