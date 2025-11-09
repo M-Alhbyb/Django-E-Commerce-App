@@ -26,27 +26,30 @@ This project serves as a clear demonstration of robust backend logic, dynamic te
    5. ***Modular and Scalable Design:*** Utilizes a Clean Django Architecture with separate, decoupled applications for maximum maintainability and scalability.
    6. ***Role-Based Access Control (RBAC):*** Features distinct, separated applications and permissions for Normal Users, Employees, and Managers.
 <br>
-      1. **Anonymous User App**: 
-<br>
-<br>
-         ![](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/anonymous-user.gif)
-<br>
-<br>
-      1. **Customer App**: 
-<br>
-<br>
-          ![](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/user-accounts.gif)
-<br>
-<br>
-      1.  **Employee App**:           
-<br>
-          ![](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/employee-app.gif)
-<br>
-<br>
-      1. **Manager App**:
-<br>
-          ![](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/manager-app.gif)
-<br>
+      1. **Anonymous User App**:
+
+
+         ![anonymous](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/anonymous-user.gif)
+
+
+      2. **Customer App**: 
+          
+          
+          ![customer](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/user-accounts.gif)
+
+
+      3. **Employee App**:  
+          
+          
+          ![employee](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/employee-app.gif)
+
+
+      4. **Manager App**:
+          
+          
+          ![manager](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/manager-app.gif)
+
+
 
    1. ***Full Data API (RESTful):*** All project data is exposed via a well-structured API, with access controlled by user permissions, enabling integration with mobile or external applications.  
    ![API Demo](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/gifs/api.gif)
@@ -57,6 +60,8 @@ This project serves as a clear demonstration of robust backend logic, dynamic te
 > [![Demo Video](https://img.shields.io/badge/▶️%20Project%20Walkthrough-3498DB?style=for-the-badge&logo=youtube)](https://github.com/M-Alhbyb/Django-E-Commerce-App/raw/main/demos/full)
 
 
+
+
 ---
 
 
@@ -64,15 +69,10 @@ This project serves as a clear demonstration of robust backend logic, dynamic te
 
 
 | Category          | Tools                                          | Rationale                                                                                  |
-
 | :---------------- | :--------------------------------------------- | :----------------------------------------------------------------------------------------- |
-
 | **Backend**       | **Python**, **Django**                         | Robust, secure, and rapid development framework.                                           |
-
 | **Database**      | **PostgreSQL** (Default)                       | Reliable and scalable for production environments. *Easily switchable to SQLite or MySQL.* |
-
 | **Frontend**      | HTML5, CSS3, **Bootstrap**                     | Responsive design and quick styling.                                                       |
-
 | **Key Libraries** | **Pillow**, **Django Admin**, **Font Awesome** | Image handling, powerful dashboard, and iconography.                                       |
 
 
