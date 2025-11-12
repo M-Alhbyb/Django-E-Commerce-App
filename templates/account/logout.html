@@ -1,0 +1,141 @@
+{% extends 'blank-main.html' %}
+{% load i18n %}
+{% load account %}
+
+{% load static %} {% load humanize %}
+
+{% block content %}
+<div class="father-logout-container">
+    <div class="logout-card logout-confirm-card">
+       
+        <div class="logout-header">
+                  <i class="fa fa-question-circle logout-icon confirm-icon" aria-hidden="true"></i>
+            <h2>{% trans "Are you sure you want to log out?" %}</h2>
+          </div>
+       
+        <p class="logout-message">
+            {% trans "You are currently logged in. Clicking the button below will securely end your session." %}
+          </p>
+       
+        <form method="post" action="{% url 'account_logout' %}" class="logout-form">
+            {% csrf_token %}
+           
+            <div class="logout-actions">
+                        <button type="submit" class="btn-action logout-btn">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    {% trans "Confirm Logout" %}
+                  </button>
+               
+                        <a href="{% url 'account_email' %}" class="btn-action go-home cancel-btn">
+                    <i class="fa fa-times-circle" aria-hidden="true"></i>
+                    {% trans "Cancel" %}
+                  </a>
+              </div>
+          </form>
+      </div>
+</div>
+
+<style>
+  .father-logout-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2em 0;
+    margin: 0;
+  }
+
+  .logout-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    text-align: center;
+    /* Default is success border, let's make confirmation a warning color */
+    border-top: 5px solid #ffc107;
+    /* Warning yellow */
+  }
+  .logout-icon {
+    font-size: 4em;
+    display: block;
+  }
+
+  /* Confirmation specific icon color */
+  .confirm-icon {
+    color: #ffc107;
+    /* Warning yellow */
+  }
+
+
+  h2 {
+    color: #333;
+    font-size: 1.8em;
+    /* Slightly smaller for the question */
+    margin: 0;
+  }
+
+  .logout-message {
+    color: #666;
+    font-size: 1em;
+  }
+
+  .logout-actions {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .btn-action {
+    /* Applying existing button styles to both button and link */
+    width: 100%;
+    /* Make buttons full width */
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .btn-action i {
+    margin-right: 8px;
+    font-size: 1.2em;
+  }
+
+  /* New styles for the Logout button */
+  .logout-btn {
+    background-color: #d10024;
+    /* Your brand color for the primary action */
+    color: white;
+    /* Ensures button styling overrides default browser button styles */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .logout-btn:hover {
+    background-color: #af0320;
+    transform: translateY(-2px);
+  }
+
+  /* Styling the Cancel button to be secondary/safe */
+  .cancel-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: 1px solid #ddd;
+  }
+
+  .cancel-btn:hover {
+    background-color: #e0e0e0;
+    color: #333;
+    transform: translateY(-2px);
+  }
+</style>
+{% endblock content %}

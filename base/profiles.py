@@ -50,7 +50,7 @@ class ManagerProfile(models.Model):
 class EmployeeProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=200, blank=True, null=True)
-    salary = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    salary = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     date_hired = models.DateField(auto_now_add=True)
     address = models.CharField(max_length=255, null=True)
     status = models.CharField(max_length=20, default='Active')
@@ -62,7 +62,7 @@ class EmployeeProfile(models.Model):
         choices=DEPARTMENT_CHOICES,
         default='general'
     )
-
+    #TODO
     position = models.CharField(
         max_length=100,
         choices=POSITIONS_CHOICES,

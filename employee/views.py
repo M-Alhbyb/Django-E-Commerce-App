@@ -14,7 +14,7 @@ def _total(model, field):
     return model.objects.aggregate(total=Sum(field))["total"] or 0
 
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
 @allowed_roles(['employee'])
 def home(request):
     total_sales = _total(Product, "sales_count")
@@ -34,7 +34,7 @@ def home(request):
     return render(request, "employee/index.html", context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
 @allowed_roles(['employee'])
 def createProduct(request):
     form = CreateProductForm()
@@ -52,7 +52,7 @@ def createProduct(request):
     return render(request, "employee/add-update-product.html", context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
 @allowed_roles(['employee'])
 def updateProduct(request, id):
     product = get_object_or_404(Product, id=id)
@@ -66,13 +66,13 @@ def updateProduct(request, id):
                 ProductGallery.objects.create(product=product, image=image)
             return redirect("employee:home")
         messages.error(request, "Data is not valid, Try Again!")
-
+    #TODO
     return render(request, "employee/add-update-product.html", {"no_search_bar": True, "form": form, 'update':'update'})
 
 def viewProduct(requset, id):
     return redirect('product', id=id)
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
 @allowed_roles(['employee'])
 def deleteProduct(request, id):
     product = get_object_or_404(Product, id=id)
@@ -97,8 +97,8 @@ def viewProducts(request):
         q = request.GET.get('q')
         if q != None:
             products = Product.objects.filter(name__icontains=q)
-    grouped_products = {}
     
+    grouped_products = {}    
     for category, product_group in groupby(products, key=attrgetter('category')):
         grouped_products[category] = list(product_group)
     

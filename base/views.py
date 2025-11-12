@@ -8,6 +8,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
+from base.decorators import allowed_roles
+
+def testview(request):
+    form = LoginForm()
+    context = {
+        'form':form
+    }
+    return render(request, 'base/test.html')
 
 def loginView(request):
     if request.method == "POST":
@@ -118,19 +126,25 @@ def all_products(request):
 
     return render(request, "base/categories.html", context)
 
-@login_required(login_url='login')
 def category_products(request, category_name):
-    user = request.user
+    context = {}
+    if request.user.id != None:
+        user = request.user
+        cart = get_object_or_404(Cart, user=user)
+        cart, created = Cart.objects.get_or_create(user=user)
+        cart_items = []
+        for item in CartItem.objects.all():
+            if item.cart == cart:
+                cart_items.append(item)
+        
+        context["user"] = user
+        context["cart"] = cart
+        context["cart_items"] = cart_items
+
     category = get_object_or_404(Category, name__iexact=category_name)
     filtered = Product.objects.filter(category=category)
 
-    cart = get_object_or_404(Cart, user=user)
 
-    cart, created = Cart.objects.get_or_create(user=user)
-    cart_items = []
-    for item in CartItem.objects.all():
-        if item.cart == cart:
-            cart_items.append(item)
 
     if request.GET:
         select = request.GET.get("s")
@@ -141,9 +155,6 @@ def category_products(request, category_name):
         )
 
     context = {
-        "user": user,
-        "cart": cart,
-        "cart_items": cart_items,
         "category": category,
         "products": filtered,
     }
@@ -172,7 +183,8 @@ def hot_deals(request):
     return render(request, "base/deals.html", context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
+@allowed_roles(['customer'])
 def cart(request, id):
     user = get_object_or_404(User, id=id)
     cart = get_object_or_404(Cart, user=user)
@@ -190,8 +202,8 @@ def cart(request, id):
     }
     return render(request, "base/cart.html", context)
 
-
-@login_required(login_url='login')
+@login_required(login_url='account_login')
+@allowed_roles(['customer'])
 def add_to_cart(request, id):
     cart = get_object_or_404(Cart, user=request.user)
     product = get_object_or_404(Product, id=id)
@@ -215,7 +227,8 @@ def add_to_cart(request, id):
     return render(request, "base/add_to_cart.html", context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
+@allowed_roles(['customer'])
 def delete_from_cart(request, id):
     product = get_object_or_404(Product, id=id)
     for item in CartItem.objects.all():
@@ -225,7 +238,8 @@ def delete_from_cart(request, id):
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
+@allowed_roles(['customer'])
 def profile(request, id):
     user = get_object_or_404(User, id__iexact=id)
     cart = get_object_or_404(Cart, user=user)
@@ -253,7 +267,8 @@ def profile(request, id):
     return render(request, "base/profile.html", context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='account_login')
+@allowed_roles(['customer'])
 def checkout(request, id):
     user = get_object_or_404(User, id=id)
     cart = get_object_or_404(Cart, user=user)
@@ -274,9 +289,25 @@ def checkout(request, id):
 
 
 def product_view(request, id):
+    context = {}
+    if request.user.id != None:
+        user = request.user
 
-    user = request.user
+        # FOR CART SHOWING IN HEADER
+        cart, created = Cart.objects.get_or_create(user=user)
+        cart_items = []
+        for item in CartItem.objects.all():
+            if item.cart == cart:
+                cart_items.append(item)
 
+        total_price = 0
+        for item in CartItem.objects.all():
+            total_price += item.product.price * item.quantity
+        # ----------------------------
+        context["user"]= user,
+        context["cart"]= cart,
+        context["cart_items"]= cart_items,
+        context["total_price"]= total_price,
     product = get_object_or_404(Product, id=id)
     gallery = product.gallery.all()
     gallery_couunt = product.gallery.count()
@@ -285,24 +316,9 @@ def product_view(request, id):
         "-discount"
     )[:4]
 
-    # FOR CART SHOWING IN HEADER
-    cart, created = Cart.objects.get_or_create(user=user)
-    cart_items = []
-    for item in CartItem.objects.all():
-        if item.cart == cart:
-            cart_items.append(item)
-
-    total_price = 0
-    for item in CartItem.objects.all():
-        total_price += item.product.price * item.quantity
-    # ----------------------------
 
     context = {
         "no_search_bar": "no",
-        "user": user,
-        "cart": cart,
-        "cart_items": cart_items,
-        "total_price": total_price,
         "product": product,
         "related_products": related_products,
         "gallery": gallery,

@@ -12,7 +12,6 @@ class User(AbstractUser):
     )
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="customer")
 
-
 class UserManager(models.Manager):
     def managers(self):
         return self.filter(role="manager")
@@ -101,6 +100,7 @@ class Cart(models.Model):
     def __str__(self):
         return f"{self.user.username}'s cart"
     
+    # TODO related name
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

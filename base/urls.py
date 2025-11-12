@@ -7,10 +7,11 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
   
-  path('login/', views.loginView , name='login'),
-  path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'), 
+  #path('login/', views.testview , name='login'),
+  #path('logout/', views.testview, name='logout'), 
   # path('redirect/', views.user_redirect, name='redirect'),  
   
+  path('test/', views.testview, name='test'),  
   # pages
   path('', views.home, name='home'),  
   path('all/', views.all_products, name='all-products'),
