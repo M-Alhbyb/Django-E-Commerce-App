@@ -1,2 +1,4 @@
-#TODO API base token
-#TODO command
+# TODO API Methods & Auth (token)   DONE
+# TODO Custom manage.py command     DONE
+# TODO cart item related names      DONE
+# TODO Enhance Employee Profile     DONE

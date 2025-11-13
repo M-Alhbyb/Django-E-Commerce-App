@@ -25,6 +25,7 @@ class UserManager(models.Manager):
 class Category(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     
+    
     def __str__(self):
         return self.name
 
@@ -100,12 +101,15 @@ class Cart(models.Model):
     def __str__(self):
         return f"{self.user.username}'s cart"
     
-    # TODO related name
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('cart', 'product')
+    
+    """An individual product in a cart with quantity"""
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items')
     quantity = models.PositiveIntegerField(default=1)
     
     def __str__(self):
-        return f"{self.product} x {self.quantity}"
+        return f"{self.product} x {self.quantity} (Cart for {self.cart.user.username})"
     

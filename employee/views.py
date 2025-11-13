@@ -66,7 +66,7 @@ def updateProduct(request, id):
                 ProductGallery.objects.create(product=product, image=image)
             return redirect("employee:home")
         messages.error(request, "Data is not valid, Try Again!")
-    #TODO
+    #
     return render(request, "employee/add-update-product.html", {"no_search_bar": True, "form": form, 'update':'update'})
 
 def viewProduct(requset, id):

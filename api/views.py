@@ -212,4 +212,3 @@ def CustomersView(request):
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 def CustomerView(request, id):
     return UserView(request, id, role="customer")
-

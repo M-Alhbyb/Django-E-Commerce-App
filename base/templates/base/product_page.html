@@ -127,15 +127,7 @@
 							<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 						</a>
 					</div>
-
-					{% comment %}
-					<!-- TODO (Optional) Wish List And Compare Page -->
-					<ul class="product-btns">
-						<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-						<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
-					</ul>
-					{% endcomment %}
-
+					
 					<ul class="product-links">
 						<li>Category:</li>
 						<li><a href="{% url 'categories' product.category %}">{{product.category}}</a></li>
@@ -183,7 +175,6 @@
 							<div class="row">
 								<div class="col-md-12">
 									<p style="text-align: center;">
-										<!-- TODO Details Tap-->
 										Coming Soon, Stay Tuned!...
 									</p>
 								</div>
@@ -196,7 +187,6 @@
 							<div class="row">
 
 								<p style="text-align: center;">
-									<!-- TODO Reviews Tap-->
 									Coming Soon, Stay Tuned!...
 								</p>
 								{% comment %}

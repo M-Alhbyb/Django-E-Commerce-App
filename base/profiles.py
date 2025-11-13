@@ -36,6 +36,9 @@ POSITIONS_CHOICES = [
     for pos in POSITIONS_BY_DEPARTMENT[dept]
 ]
 
+# --- Status Of Employee
+STATUS_CHOICES = (('Active', 'Active'), ('Inactive', 'Inactive'))
+
 # -------------------- Models --------------------
 
 class ManagerProfile(models.Model):
@@ -50,10 +53,13 @@ class ManagerProfile(models.Model):
 class EmployeeProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=200, blank=True, null=True)
-    salary = models.DecimalField(max_digits=100, decimal_places=2, default=0)
-    date_hired = models.DateField(auto_now_add=True)
     address = models.CharField(max_length=255, null=True)
-    status = models.CharField(max_length=20, default='Active')
+    
+    salary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    date_hired = models.DateField(auto_now_add=True)
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Active')
+    
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -62,7 +68,6 @@ class EmployeeProfile(models.Model):
         choices=DEPARTMENT_CHOICES,
         default='general'
     )
-    #TODO
     position = models.CharField(
         max_length=100,
         choices=POSITIONS_CHOICES,
@@ -70,7 +75,7 @@ class EmployeeProfile(models.Model):
     )
 
     def __str__(self):
-        return f"Employee: {self.user.username}"
+        return f"{self.user.username} ({self.department} - {self.position})"
 
 
 class CustomerProfile(models.Model):
