@@ -4,6 +4,10 @@ A modern, full-featured E-Commerce solution built with Django and Python. This p
 
 This project serves as a clear demonstration of robust backend logic, dynamic template rendering, and a clean, modular architecture suitable for building a professional online store.
 
+# Live Preview:
+   [Live Preview](https://django-e-commerce-app-34ro.onrender.com)
+
+
 # ✨ Key Features
 
    1. ***Secure User Accounts:*** Implements secure sign-up, login, password management, and personalized user profile management.
