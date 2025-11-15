@@ -11,7 +11,6 @@ urlpatterns = [
   #path('logout/', views.testview, name='logout'), 
   # path('redirect/', views.user_redirect, name='redirect'),  
   
-  path('test/', views.testview, name='test'),  
   # pages
   path('', views.home, name='home'),  
   path('all/', views.all_products, name='all-products'),
@@ -28,7 +27,8 @@ urlpatterns = [
   path('checkout/<str:id>', views.checkout, name='checkout'),
   
   path('product/<str:id>', views.product_view, name='product'),
-  
+
+  path('test/', views.test_view, name='test') 
   # Manage Users 
  # path('manager/<str:id>', views.manage_employees, name='manager'),
 ]

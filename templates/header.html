@@ -1,0 +1,90 @@
+
+{% load static %} {% load humanize %}
+	<!-- HEADER -->
+	<header>
+		<!-- MAIN HEADER -->
+		<div id="header">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row" style="display: flex; align-items: center; justify-content: space-between;">
+					<!-- LOGO -->
+					<div class="col-md-3">
+						<div class="header-logo">
+
+							{% if request.resolver_match.namespace == 'manager' %}
+							<a href="{% url 'manager:home' %}" class="logo">
+								<img src="{% static 'img/logo.png' %}" alt="">
+							</a>
+							{% elif request.resolver_match.namespace == 'employee' %}
+							<a href="{% url 'employee:home' %}" class="logo">
+								<img src="{% static 'img/logo.png' %}" alt="">
+							</a>
+							{% else %}
+							<a href="{% url 'home' %}" class="logo">
+								<img src="{% static 'img/logo.png' %}" alt="">
+							</a>
+							{% endif %}
+
+						</div>
+					</div>
+					<!-- /LOGO -->
+					<nav class="main-header-nav">
+						<ul class="header-list">
+							{% if request.resolver_match.namespace == 'manager' %}
+
+							{% with current_view=request.resolver_match.view_name %}
+
+							<li class="nav-item">
+								<a href="{% url 'manager:all-employees' %}"
+									class="nav-link {% if current_view == 'all-employees' %}active{% endif %}">
+									All Employees
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'manager:create-employee' %}"
+									class="nav-link {% if current_view == 'create-employee' %}active{% endif %}">
+									Add Employee
+								</a>
+							</li>
+							<li class="nav-item logout">
+								<a href="{% url 'account_logout' %}" class="nav-link">
+									Log Out
+								</a>
+							</li>
+
+							{% endwith %}
+
+							{% elif request.resolver_match.namespace == 'employee' %}
+
+							{% with current_view=request.resolver_match.view_name %}
+
+							<li class="nav-item">
+								<a href="{% url 'employee:all-products' %}"
+									class="nav-link {% if current_view == 'all-products' %}active{% endif %}">
+									All Products
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'employee:create-product' %}"
+									class="nav-link {% if current_view == 'create-product' %}active{% endif %}">
+									Add Product
+								</a>
+							</li>
+							<li class="nav-item logout">
+								<a href="{% url 'account_logout' %}" class="nav-link">
+									Log Out
+								</a>
+							</li>
+
+							{% endwith %}
+							{% endif %}
+						</ul>
+					</nav>
+					<!-- row -->
+				</div>
+				<!-- container -->
+			</div>
+			<!-- /MAIN HEADER -->
+	</header>
+	<!-- /HEADER -->

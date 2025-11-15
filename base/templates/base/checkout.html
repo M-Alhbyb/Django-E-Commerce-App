@@ -126,7 +126,8 @@
 					</div>
 
 					<!-- Order Details -->
-					<div class="col-md-5 order-details">
+					<form class="col-md-5 order-details" method="POST">
+						{% csrf_token %}
 						<div class="section-title text-center">
 							<h3 class="title">Your Order</h3>
 						</div>
@@ -193,8 +194,8 @@
 								I've read and accept the <a href="#">terms & conditions</a>
 							</label>
 						</div>
-						<a href="{% url 'home' %}" class="primary-btn order-submit">Place order</a>
-					</div>
+						<input type="submit" class="primary-btn order-submit" value="Place Order">
+					</form>
 					<!-- /Order Details -->
 				</div>
 				<!-- /row -->

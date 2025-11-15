@@ -1,7 +1,6 @@
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import user_passes_test
-from .models import User, Category, Product, ProductGallery, Cart, CartItem
+from .models import User, Category, Product, Cart, CartItem
 from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib import messages
@@ -10,12 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 from base.decorators import allowed_roles
 
-def testview(request):
-    form = LoginForm()
-    context = {
-        'form':form
-    }
-    return render(request, 'base/test.html')
+from base.tasks import send_checkout_email
 
 def loginView(request):
     if request.method == "POST":
@@ -271,10 +265,10 @@ def profile(request, id):
 @allowed_roles(['customer'])
 def checkout(request, id):
     user = get_object_or_404(User, id=id)
-    cart = get_object_or_404(Cart, user=user)
     if request.user != user:
         return HttpResponse("Access Denied")
 
+    cart = get_object_or_404(Cart, user=user)
     total_price = 0
     for item in CartItem.objects.all():
         total_price += item.product.price * item.quantity
@@ -283,6 +277,11 @@ def checkout(request, id):
     for item in CartItem.objects.all():
         if item.cart == cart:
             cart_items.append(item)
+    
+    if request.method == 'POST':
+            send_checkout_email.delay(id)
+            messages.info(request, 'You Will Get Confirmation Email Soon')
+            return redirect('home')
 
     context = {"cart": cart, "cart_items": cart_items, "total_price": total_price}
     return render(request, "base/checkout.html", context)
@@ -326,3 +325,7 @@ def product_view(request, id):
     }
 
     return render(request, "base/product_page.html", context)
+
+
+def test_view(request):
+    return HttpResponse('TEST VIEW')

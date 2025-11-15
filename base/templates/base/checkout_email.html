@@ -1,0 +1,64 @@
+{% load static %}
+{% load humanize %}
+  <!-- SECTION -->
+  <div class="section">
+    <!-- container -->
+    <div class="container">
+      <div class="header">
+        <h2>Electro Store</h2>
+        <h3>Order Confirmation</h3>
+    </div>
+
+    <p>Hello <strong style="color: #d10024;"> {{name}},</strong></p>
+    <p>Thank you for your order! Here are the details:</p>
+ 
+      <!-- row -->
+      <div class="row">
+
+
+        <!-- Order Details -->
+        <div class="col-md-5 order-details" style="border: none; min-width: 70%;">
+          <div class="order-summary">
+            <div class="order-col">
+              <div>
+                <strong>PRODUCT</strong>
+              </div>
+              <div>
+                <strong>TOTAL</strong>
+              </div>
+            </div>
+            <div class="order-products">
+              {% for item in cart_items %}
+                <div class="order-col">
+                  <div>{{ item.quantity }}x {{ item|title }}</div>
+                  <div>${{ item.product.price|intcomma }}</div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="order-col">
+              <div>Shiping</div>
+              <div>
+                <strong>FREE</strong>
+              </div>
+            </div>
+            <div class="order-col">
+              <div>
+                <strong>TOTAL</strong>
+              </div>
+              <div>
+                <strong class="order-total">${{ total_price }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Order Details -->
+      </div>
+      <!-- /row -->
+    </div>
+    <!-- /container -->
+  </div>
+  <style>
+    .order-details::before {
+      display: none;
+    }
+  </style>
