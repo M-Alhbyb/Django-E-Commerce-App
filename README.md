@@ -134,13 +134,10 @@ Create a file named .env in the project root directory and add your secret crede
 ```Bash
 
 
-# .env file
+# /etc/config.json
 
-SECRET_KEY=your_strong_django_secret_key_here
-
-DEBUG=True
-
-ALLOWED_HOSTS=localhost,127.0.0.1
+create /etc/config.json or edit settings.py
+the file must contains 'SECRET_KEY' and 'EMAIL_HOST_USER' and 'EMAIL_HOST_PASSWORD'
 
 # Add Database, Email, or Third-Party API keys here (e.g., PAYPAL_CLIENT_ID)
 
@@ -166,6 +163,9 @@ python manage.py createsuperuser
 
 python manage.py runserver
 
+# Or Use Gunicorn (Best Practice)
+source venv/bin/activate
+gunicorn projectname.wsgi:application --bind 0.0.0.0:8000
 
 Open your browser and navigate to: 👉 http://localhost:8000
 
@@ -221,11 +221,11 @@ The project is structured into modular Django applications for maximum maintaina
 
 └── api/               # API app
 
-    ├── serializers.py
+|   ├── serializers.py
 
-    ├── views.py
+|   ├── views.py
 
-    └── urls.py
+|   └── urls.py
 
 ```
 
